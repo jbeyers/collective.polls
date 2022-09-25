@@ -35,10 +35,17 @@ def PossiblePolls(context):
     polls = utility.recent_polls(context=navigation_root, show_all=False, limit=999999)
 
     values = [SimpleTerm(value='latest', title=_(u'Latest opened poll'))]
-    values.extend(
-        SimpleTerm(value=i.UID, title=i.Title.decode('utf-8'))
-        for i in polls
-    )
+    try:
+        values.extend(
+            SimpleTerm(value=i.UID, title=i.Title.decode('utf-8'))
+            for i in polls
+        )
+    except AttributeError:
+        values.extend(
+            SimpleTerm(value=i.UID, title=i.Title)
+            for i in polls
+        )
+
 
     return SimpleVocabulary(values)
 
